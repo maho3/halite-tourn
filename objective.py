@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import hlt
 
+=======
+import numpy as np
+>>>>>>> 676e1684404889f99055f4bdfd66e9bd0cf46dd9
 class Objective:
 
     def __init__(self,entity, objtype):
