@@ -7,9 +7,8 @@ from .entity import Position
 class Objective:
 
     
-    def __init__(loc, rad, objtype, my_dock, my_spaces):
-        self.loc = loc
-        self.rad = rad
+    def __init__(entity, objtype, my_dock, my_spaces):
+        self.entity = entity
         self.objtype = objtype
         self.my_dock = my_dock
         self.my_spaces = my_spaces
