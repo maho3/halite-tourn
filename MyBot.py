@@ -37,22 +37,23 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
 def updateObjectives(game_map):
     objs = []
     for p in planets:
-        en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x))
-        for i in range(len(en_list)):
-            if p.calculate_distance_between(en_list[i]) > 8*hlt.constants.DOCK_RADIUS:
-                break
+        en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x)) for i in range(len(en_list)):
+        if p.calculate_distance_between(en_list[i]) > 8*hlt.constants.DOCK_RADIUS:
+            break
         
-        if not p.is_owned():
+        if not p.is_owned() and p.remaining_resources > 0:
             objs.append(Objective(p, 'dock_unowned'))
+            objs[-1].addEnShip(en_list[:i])
         elif p.owner == me:
             objs.append(Objective(p, 'defend'))
-            
-            if not p.is_full():
+            objs[-1].addEnShip(en_list[:i])
+            if not p.is_full() and p.remaining_resources > 0:
                 objs.append(Objective(p,'dock_owned'))
+                objs[-1].addEnShip(en_list[:i])
         elif p.owner != me:
             objs.append(Objective(p, 'attack'))
+            objs[-1].addEnShip(en_list[:i])
             
-        objs[-1].addEnShip(en_list[:i])
         
     return objs
 
@@ -60,6 +61,8 @@ def assignObjectives(objectives, my_ships):
     if len(objectives) == 0:
         return objectives
     for ship in my_ships:
+        if ship.docking_status != 0 and ship.planet.remaining_resources > 0:
+            continue
         bestObj = objectives[0]
         bestScore = -100000
         for obj in objectives:
