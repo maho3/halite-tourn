@@ -7,6 +7,7 @@ import ship
 # GAME START
 # Here we define the bot's name as Settler and initialize the game, including communication with the Halite engine.
 game = hlt.Game("Version2")
+me = game_map.get_me()
 # Then we print our start message to the logs
 logging.info("Starting my Version2 bot!")
 '''
@@ -33,7 +34,13 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
     return None
 '''
 
+objtype = ['attack','defend','dock_owned', 'dock_unowned']
 def updateObjectives(game_map):
+    objs = []
+    for p in planets:
+        if planet.owner == me:
+            
+    
     return []
 
 def assignObjectives(objectives, game_map):

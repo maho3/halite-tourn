@@ -10,8 +10,6 @@ class Objective:
     def __init__(entity, objtype, my_dock, my_spaces):
         self.entity = entity
         self.objtype = objtype
-        self.my_dock = my_dock
-        self.my_spaces = my_spaces
         
         self.my_ships = []
         self.en_ships = []
