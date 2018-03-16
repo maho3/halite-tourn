@@ -1,7 +1,7 @@
 import hlt
 
 def weak_ship(planet):
-    return planet.all_docked_ships[0]
+    return planet.all_docked_ships()[0]
 
 def get_nearest_enemy_ship(planet, opponent_ships):
     current_dist = None
@@ -13,7 +13,7 @@ def get_nearest_enemy_ship(planet, opponent_ships):
         if ship.calculate_distance_between(planet) < current_dist:
             current_dist = ship.calculate_distance_between(planet)
             nearest_ship = ship
-    return Position((nearest_ship.x + planet.x)/2, (nearest_ship.y + planet.y)/2)
+    return hlt.entity.Position((nearest_ship.x + planet.x)/2, (nearest_ship.y + planet.y)/2)
 
 def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
     commands = []
@@ -21,9 +21,9 @@ def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
     if objective.objtype == 'dock_unowned' or objective.objtype == 'dock_unowned':
         target = objective.entity
     elif objective.objtype == 'defend':
-        target = get_nearest_enemy_ship(planet, opponent_ships)
+        target = get_nearest_enemy_ship(objective.entity, opponent_ships)
     elif objective.objtype == 'attack':
-        target = objective.weak_ship(objective.entity)
+        target = weak_ship(objective.entity)
 
     if target != None:
         for ship in objective.my_ships:

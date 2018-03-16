@@ -44,12 +44,12 @@ def updateObjectives(game_map):
         
         if not p.is_owned():
             objs.append(Objective(p, 'dock_unowned'))
-        if p.owner == me:
+        elif p.owner == me:
             objs.append(Objective(p, 'defend'))
             
             if not p.is_full():
                 objs.append(Objective(p,'dock_owned'))
-        if p.owner != me:
+        elif p.owner != me:
             objs.append(Objective(p, 'attack'))
             
         objs[-1].addEnShip(en_list[:i])
@@ -70,10 +70,10 @@ def assignObjectives(objectives, my_ships):
         bestObj.addMyShip(ship)
     return objectives
 
-flee_pos = [hlt.entity.Position(0,0), hlt.entity.Position(game_map.width-1,0),
-                    hlt.entity.Position(0,game_map.height-1), 
-                    hlt.entity.Position(game_map.width-1,game_map.height-1)]
-def flee():
+#flee_pos = [hlt.entity.Position(0,0), hlt.entity.Position(game_map.width-1,0),
+#                    hlt.entity.Position(0,game_map.height-1),
+#                    hlt.entity.Position(game_map.width-1,game_map.height-1)]
+def flee(game_map):
     for ship in my_ships:
         navigate_command = None
         if (ship.docking_status != ship.DockingStatus.UNDOCKED):
@@ -126,7 +126,7 @@ while True:
             opponent_ships += player.all_ships()
     
     if (0.95*len(my_ships) < 0.05*len(opponent_ships)):
-        command_queue = flee()
+        command_queue = flee(game_map)
         game.send_command_queue(command_queue)
         continue
     
