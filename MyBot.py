@@ -38,7 +38,7 @@ def updateObjectives(game_map, opponent_ships):
     for p in planets:
         en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x)) 
         for i in range(len(en_list)):
-            if p.calculate_distance_between(en_list[i]) > 3 * hlt.constants.DOCK_RADIUS:
+            if p.calculate_distance_between(en_list[i]) > 40 - p.radius:
                 break
         
         if not p.is_owned() and p.remaining_resources > 0:
@@ -129,7 +129,7 @@ while True:
     my_ships = game_map.get_me().all_ships()
     
     for player in game_map.all_players():
-        if player.id != game_map.get_me():
+        if player.id != game_map.get_me().id:
             opponent_ships += player.all_ships()
     
     if (0.95*len(my_ships) < 0.05*len(opponent_ships)):
