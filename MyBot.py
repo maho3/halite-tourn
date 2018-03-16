@@ -136,7 +136,7 @@ while True:
     objectives = assignObjectives(objectives, my_ships)
 
     for objective in objectives:
-        command_queue += micro.getMovesForObjective(objective,game_map,own_ships_nav)
+        command_queue += micro.getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships)
 
     
     ''' 
