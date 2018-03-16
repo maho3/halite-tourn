@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 import hlt
-
-=======
-import numpy as np
->>>>>>> 676e1684404889f99055f4bdfd66e9bd0cf46dd9
 class Objective:
 
     def __init__(self,entity, objtype):
@@ -25,7 +20,7 @@ class Objective:
             numSpots = self.entity.num_docking_spots
             mySpaces = numSpots - dockedShips
             if self.objtype == 'attack':
-                enemyUndocked -= myDocked
+                enemyUndocked -= dockedShips 
         
         if self.objtype == 'attack':
             self.priority = 50 + myUndocked * 10 - enemyUndocked * 10             
@@ -45,7 +40,7 @@ class Objective:
         self.updatePriority()
         
     def addEnShip(self,ship):
-        self.en_ships.append(ship)
+        self.en_ships += ship
         self.updatePriority()
 
     def remMyShip(self,ship):
