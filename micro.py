@@ -36,7 +36,7 @@ def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
     if target != None:
         for ship in objective.my_ships:
             command = None
-            if ship.docking_status != 0:
+            if ship.docking_status == 2 or ship.docking_status == 3:
                 command = ship.undock()
             elif (objective.objtype == 'dock_owned' or objective.objtype == 'dock_unowned')  and ship.can_dock(objective.entity) and not objective.entity.is_full():
                 command = ship.dock(objective.entity)
