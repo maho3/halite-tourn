@@ -7,7 +7,7 @@ from .entity import Position
 class Objective:
 
     
-    def __init__(entity, objtype, my_dock, my_spaces):
+    def __init__(entity, objtype, en_ships):
         self.entity = entity
         self.objtype = objtype
         

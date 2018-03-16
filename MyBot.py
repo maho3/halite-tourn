@@ -1,8 +1,8 @@
 import hlt
 import logging
-import objective
 import micro
 import ship
+from objective import Objective
 
 # GAME START
 # Here we define the bot's name as Settler and initialize the game, including communication with the Halite engine.
@@ -34,14 +34,28 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
     return None
 '''
 
-objtype = ['attack','defend','dock_owned', 'dock_unowned']
+# objtype = ['attack','defend','dock_owned', 'dock_unowned']
 def updateObjectives(game_map):
     objs = []
     for p in planets:
+        en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x))
+        for i in range(len(en_list)):
+            if p.calculate_distance_between(en_list[i]) > 2*constants.DOCK_RADIUS:
+                break
+        
+        if not planet.is_owned():
+            objs += Objective(planet, 'dock_unowned')
         if planet.owner == me:
+            objs += Objective(planet, 'defend')
             
-    
-    return []
+            if not planet.is_full():
+                objs += Objective(planet,'dock_owned')
+        if planet.owner != me:
+            objs += Objective(planet, 'attack')
+            
+        objs[-1].addEnShip(en_list[:i])
+        
+    return objs
 
 def assignObjectives(objectives, my_ships):
     for ship in my_ships:
