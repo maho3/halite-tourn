@@ -31,9 +31,4 @@ class Objective:
     def remMyShip(ship):
         self.my_ships.remove(ship)
         updatePriority()
-    
-    
-    
 
-=======
->>>>>>> Stashed changes
