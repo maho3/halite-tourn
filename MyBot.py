@@ -111,10 +111,13 @@ def flee(game_map):
 
 
 me = None
+turn = 0
 
 while True:
     # TURN START
     # Update the map for the new turn and get the latest version
+    turn+=1
+    logging.info(str(turn))
     game_map = game.update_map()
     me = game_map.get_me()
     # Here we define the set of commands to be sent to the Halite engine at the end of the turn

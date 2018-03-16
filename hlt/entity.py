@@ -277,7 +277,7 @@ class Ship(Entity):
                 obstacles.append(foreign_entity)
             return obstacles
     
-    def navigate(self, target, game_map, speed, count_corrections=0, avoid_obstacles=True, max_corrections=90/3, angular_step=3, entities=[], ignore_ships = True, ignore_planets = False):
+    def navigate(self, target, game_map, speed, count_corrections=0, avoid_obstacles=True, max_corrections=180/3, angular_step=3, entities=[], ignore_ships = True, ignore_planets = False):
         """
             Move a ship to a specific target position (Entity). It is recommended to place the position
             itself here, else navigate will crash into the target. If avoid_obstacles is set to True (default)
