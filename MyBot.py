@@ -43,8 +43,10 @@ def updateObjectives(game_map):
     
     return []
 
-def assignObjectives(objectives, game_map):
-    return {}
+def assignObjectives(objectives, my_ships):
+    for ship in my_ships:
+        pass
+    return objectives
 
 def getMovesForObjective(objective):
     return {}
@@ -64,12 +66,10 @@ while True:
     for player in game_map.all_players():
         if player.id != game_map.get_me():
             opponent_ships += player.all_ships()
-
-
     
     objectives = updateObjectives(game_map)
     
-    shipToObjective = assignObjectives(objectives, game_map)
+    objectives = assignObjectives(objectives, my_ships)
 
     for objective in objectives:
         command_queue += getMovesForObjective(objective)

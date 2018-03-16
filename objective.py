@@ -13,18 +13,20 @@ class Objective:
         
         self.my_ships = []
         self.en_ships = []
-        
+        updatePriority()
     
+
     def updatePriority():
-        return 0
-        
+        self.priority = 0    
     
     def addMyShip(ship):
         self.my_ships += ship
         updatePriority()
+        
     def addEnShip(ship):
         self.en_ships += ship
         updatePriority()
+
     def remMyShip(ship):
         self.my_ships.remove(ship)
         updatePriority()
