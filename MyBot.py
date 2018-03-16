@@ -33,12 +33,12 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
 '''
 
 # objtype = ['attack','defend','dock_owned', 'dock_unowned']
-def updateObjectives(game_map):
+def updateObjectives(game_map, opponent_ships):
     objs = []
     for p in planets:
         en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x)) 
         for i in range(len(en_list)):
-            if p.calculate_distance_between(en_list[i]) > 3*hlt.constants.DOCK_RADIUS:
+            if p.calculate_distance_between(en_list[i]) > 3 * hlt.constants.DOCK_RADIUS:
                 break
         
         if not p.is_owned() and p.remaining_resources > 0:
@@ -61,7 +61,7 @@ def assignObjectives(objectives, my_ships):
     if len(objectives) == 0:
         return objectives
     for ship in my_ships:
-        if ship.docking_status == 1 and ship.planet.remaining_resources > 0:
+        if (ship.docking_status == 1 or ship.docking_status ==2) and ship.planet.remaining_resources > 0:
             continue
         bestObj = objectives[0]
         bestScore = -100000
@@ -138,7 +138,7 @@ while True:
         continue
     
     
-    objectives = updateObjectives(game_map)
+    objectives = updateObjectives(game_map, opponent_ships)
     
     objectives = assignObjectives(objectives, my_ships)
 
