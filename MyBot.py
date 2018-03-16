@@ -36,14 +36,12 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
 def updateObjectives(game_map):
     return []
 
-def assignObjectives(objectives, shipToObjective, game_map):
+def assignObjectives(objectives, game_map):
     return {}
 
 def getMovesForObjective(objective):
     return {}
 
-objectives = []
-shipToObjective = {}
 while True:
     # TURN START
     # Update the map for the new turn and get the latest version
@@ -53,7 +51,7 @@ while True:
     command_queue = []
     
     objectives = updateObjectives(game_map)
-    shipToObjective = assignObjectives(objectives, shipToObjective, game_map)
+    shipToObjective = assignObjectives(objectives, game_map)
 
     for objective in objectives:
         command_queue += getMovesForObjective(objective)
