@@ -1,7 +1,6 @@
 import hlt
 import logging
 import micro
-import ship
 from objective import Objective
 
 # GAME START
