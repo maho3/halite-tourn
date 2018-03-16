@@ -32,12 +32,14 @@ def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
                 target = hlt.entity.Position((nearest_ship.x + planet.x)/2, (nearest_ship.y + planet.y)/2)
     elif objective.objtype == 'attack':
         target = weak_ship(objective.entity)
-
+    
     if target != None:
         for ship in objective.my_ships:
             command = None
-            if (objective.objtype == 'dock_owned' or objective.objtype == 'dock_unowned')  and ship.can_dock(objective.entity) and not objective.entity.is_full():
-                command = (ship.dock(objective.entity))
+            if ship.docking_status != 0:
+                command = ship.undock()
+            elif (objective.objtype == 'dock_owned' or objective.objtype == 'dock_unowned')  and ship.can_dock(objective.entity) and not objective.entity.is_full():
+                command = ship.dock(objective.entity)
             else:
                 command = ship.navigate(
                                         ship.closest_point_to(target),

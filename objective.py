@@ -1,3 +1,4 @@
+import numpy as np
 class Objective:
 
     
@@ -11,7 +12,7 @@ class Objective:
     
 
     def updatePriority(self):
-        self.priority = 0    
+        self.priority = np.random.rand()
     
     def addMyShip(self,ship):
         self.my_ships.append(ship)
