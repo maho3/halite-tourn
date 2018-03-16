@@ -3,9 +3,6 @@ import abc
 import math
 from enum import Enum
 from . import constants
-from . import collision
-
-
 
 
 class Entity:
@@ -79,6 +76,7 @@ class Entity:
     def __repr__(self):
         return self.__str__()
 
+
 class Planet(Entity):
     """
     A planet on the game map.
@@ -91,7 +89,7 @@ class Planet(Entity):
     :ivar current_production: How much production the planet has generated at the moment. Once it reaches the threshold, a ship will spawn and this will be reset.
     :ivar remaining_resources: The remaining production capacity of the planet.
     :ivar health: The planet's health.
-    :ivar owner: The player ID of the owner, if any. If None, Entity is not owned.
+    :ivar owner: The Player object of the owner, if any. Else None if Planet is not owned.
 
     """
 
@@ -150,7 +148,7 @@ class Planet(Entity):
         This function serves to take the id values set in the parse function and use it to populate the planet
         owner and docked_ships params with the actual objects representing each, rather than IDs
 
-        :param dict[int, game_map.Player] players: A dictionary of player objects keyed by id
+        :param dict[int, gane_map.Player] players: A dictionary of player objects keyed by id
         :return: nothing
         """
         if self.owner is not None:
@@ -270,16 +268,9 @@ class Ship(Entity):
         :rtype: str
         """
         return "u {}".format(self.id)
-    
-    def between_own_ships(self, target, entities):
-        
-        obstacles = []
-        for foreign_entity in entities:
-            if collision.intersect_segment_circle(self, target, foreign_entity, fudge=self.radius + 0.5):
-                obstacles.append(foreign_entity)
-        return obstacles
 
-    def navigate(self, target, game_map, speed, count_corrections=0, avoid_obstacles=True, max_corrections=90/10, angular_step=10, entities=[], ignore_ships = True, ignore_planets = False):
+    def navigate(self, target, game_map, speed, avoid_obstacles=True, max_corrections=90, angular_step=1,
+                 ignore_ships=False, ignore_planets=False):
         """
         Move a ship to a specific target position (Entity). It is recommended to place the position
         itself here, else navigate will crash into the target. If avoid_obstacles is set to True (default)
@@ -304,26 +295,16 @@ class Ship(Entity):
             return None
         distance = self.calculate_distance_between(target)
         angle = self.calculate_angle_between(target)
-        
         ignore = () if not (ignore_ships or ignore_planets) \
             else Ship if (ignore_ships and not ignore_planets) \
             else Planet if (ignore_planets and not ignore_ships) \
             else Entity
-        
-        if avoid_obstacles and (game_map.obstacles_between(self, target) or self.between_own_ships(target,entities)):
-            
-            new_target_dx = math.cos(math.radians(angle + (-1)**(count_corrections+1)*angular_step * (count_corrections+1))) * distance
-            new_target_dy = math.sin(math.radians(angle + (-1)**(count_corrections+1)*angular_step * (count_corrections+1))) * distance
+        if avoid_obstacles and game_map.obstacles_between(self, target, ignore):
+            new_target_dx = math.cos(math.radians(angle + angular_step)) * distance
+            new_target_dy = math.sin(math.radians(angle + angular_step)) * distance
             new_target = Position(self.x + new_target_dx, self.y + new_target_dy)
-            return self.navigate(new_target, game_map, speed, count_corrections + 1, True, max_corrections - 1, angular_step, entities)
+            return self.navigate(new_target, game_map, speed, True, max_corrections - 1, angular_step)
         speed = speed if (distance >= speed) else distance
-        x = self.x + math.cos(math.radians(angle)) * speed
-        y = self.y + math.sin(math.radians(angle)) * speed
-        newpos = Position(x, y)
-        oldpos = Position(self.x, self.y)
-        midpos = Position((self.x + x) / 2, (self.y + y)/2)
-        entities.append(newpos)
-        entities.append(midpos)
         return self.thrust(speed, angle)
 
     def can_dock(self, planet):
@@ -334,7 +315,7 @@ class Ship(Entity):
         :return: True if can dock, False otherwise
         :rtype: bool
         """
-        return self.calculate_distance_between(planet) <= planet.radius + constants.DOCK_RADIUS
+        return self.calculate_distance_between(planet) <= planet.radius + constants.DOCK_RADIUS + constants.SHIP_RADIUS
 
     def _link(self, players, planets):
         """

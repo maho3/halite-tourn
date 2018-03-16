@@ -127,7 +127,7 @@ class Map:
     def obstacles_between(self, ship, target, ignore=()):
         """
         Check whether there is a straight-line path to the given point, without planetary obstacles in between.
-        
+
         :param entity.Ship ship: Source entity
         :param entity.Entity target: Target entity
         :param entity.Entity ignore: Which entity type to ignore
@@ -210,5 +210,3 @@ class Player:
 
     def __repr__(self):
         return self.__str__()
-
-    
