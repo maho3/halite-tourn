@@ -1,33 +1,27 @@
-from .entity import Position
-
-
-
-
-
 class Objective:
 
     
-    def __init__(entity, objtype, en_ships):
+    def __init__(self,entity, objtype):
         self.entity = entity
         self.objtype = objtype
         
         self.my_ships = []
         self.en_ships = []
-        updatePriority()
+        self.updatePriority()
     
 
-    def updatePriority():
+    def updatePriority(self):
         self.priority = 0    
     
-    def addMyShip(ship):
-        self.my_ships += ship
-        updatePriority()
+    def addMyShip(self,ship):
+        self.my_ships.append(ship)
+        self.updatePriority()
         
-    def addEnShip(ship):
-        self.en_ships += ship
-        updatePriority()
+    def addEnShip(self,ship):
+        self.en_ships.append(ship)
+        self.updatePriority()
 
-    def remMyShip(ship):
+    def remMyShip(self,ship):
         self.my_ships.remove(ship)
-        updatePriority()
+        self.updatePriority()
 

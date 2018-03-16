@@ -7,7 +7,6 @@ from objective import Objective
 # GAME START
 # Here we define the bot's name as Settler and initialize the game, including communication with the Halite engine.
 game = hlt.Game("Version2")
-me = game_map.get_me()
 # Then we print our start message to the logs
 logging.info("Starting my Version2 bot!")
 '''
@@ -40,18 +39,18 @@ def updateObjectives(game_map):
     for p in planets:
         en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x))
         for i in range(len(en_list)):
-            if p.calculate_distance_between(en_list[i]) > 2*constants.DOCK_RADIUS:
+            if p.calculate_distance_between(en_list[i]) > 2*hlt.constants.DOCK_RADIUS:
                 break
         
-        if not planet.is_owned():
-            objs += Objective(planet, 'dock_unowned')
-        if planet.owner == me:
-            objs += Objective(planet, 'defend')
+        if not p.is_owned():
+            objs.append(Objective(p, 'dock_unowned'))
+        if p.owner == me:
+            objs.append(Objective(p, 'defend'))
             
-            if not planet.is_full():
-                objs += Objective(planet,'dock_owned')
-        if planet.owner != me:
-            objs += Objective(planet, 'attack')
+            if not p.is_full():
+                objs.append(Objective(p,'dock_owned'))
+        if p.owner != me:
+            objs.append(Objective(p, 'attack'))
             
         objs[-1].addEnShip(en_list[:i])
         
@@ -64,17 +63,20 @@ def assignObjectives(objectives, my_ships):
         bestObj = objectives[0]
         bestScore = -100000
         for obj in objectives:
-            score = obj.priroity - ship.calculate_distance_between(obj.entity)
+            score = obj.priority - ship.calculate_distance_between(obj.entity)
             if score > bestScore:
                 bestScore = score
                 bestObj = obj
         bestObj.addMyShip(ship)
     return objectives
 
+me = None
+
 while True:
     # TURN START
     # Update the map for the new turn and get the latest version
     game_map = game.update_map()
+    me = game_map.get_me()
     # Here we define the set of commands to be sent to the Halite engine at the end of the turn
     
     own_ships_nav = [] #list of our ships by position just for navigation purposes
@@ -92,7 +94,7 @@ while True:
     objectives = assignObjectives(objectives, my_ships)
 
     for objective in objectives:
-        command_queue += getMovesForObjective(objective)
+        command_queue += micro.getMovesForObjective(objective,game_map,own_ships_nav)
 
     
     ''' 
