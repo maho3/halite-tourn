@@ -47,10 +47,21 @@ while True:
     # Update the map for the new turn and get the latest version
     game_map = game.update_map()
     # Here we define the set of commands to be sent to the Halite engine at the end of the turn
-    own_ships = []
+    
+    own_ships_nav = [] #list of our ships by position just for navigation purposes
     command_queue = []
+    planets = game_map.all_planets()
+    opponent_ships = []
+    my_ships = game_map.get_me().all_ships()
+    
+    for player in game_map.all_players():
+        if player.id != game_map.get_me():
+            opponent_ships += player.all_ships()
+
+
     
     objectives = updateObjectives(game_map)
+    
     shipToObjective = assignObjectives(objectives, game_map)
 
     for objective in objectives:
@@ -100,7 +111,7 @@ while True:
                 navigate_command = ship.navigate(
                     ship.closest_point_to(nearest_planet),
                     game_map,
-                    speed=int(hlt.constants.MAX_SPEED), entities=own_ships)
+                    speed=int(hlt.constants.MAX_SPEED), entities=own_ships_nav)
             
             if (navigate_command != None):
                 command_queue.append(navigate_command)
