@@ -64,7 +64,7 @@ while True:
     my_ships = game_map.get_me().all_ships()
     
     for player in game_map.all_players():
-        if player.id != game_map.get_me():
+        if (player.id != game_map.get_me()):
             opponent_ships += player.all_ships()
     
     objectives = updateObjectives(game_map)
@@ -72,7 +72,7 @@ while True:
     objectives = assignObjectives(objectives, my_ships)
 
     for objective in objectives:
-        command_queue += getMovesForObjective(objective)
+        command_queue += micro.getMovesForObjective(objective, game_map, own_ships_nav)
 
     
     ''' 
