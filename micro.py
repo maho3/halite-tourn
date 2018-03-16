@@ -1,4 +1,4 @@
-def getMovesForObjective(objective, game_map):
+def getMovesForObjective(objective, game_map, own_ships_nav):
     commands = []
     for ship in objective.my_ships:
         command = navigate(navigate_command = ship.navigate(

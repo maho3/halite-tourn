@@ -72,7 +72,7 @@ while True:
     shipToObjective = assignObjectives(objectives, game_map)
 
     for objective in objectives:
-        command_queue += micro.getMovesForObjective(objective, game_map)
+        command_queue += micro.getMovesForObjective(objective, game_map, own_ships_nav)
 
     
     ''' 
