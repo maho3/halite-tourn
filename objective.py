@@ -31,7 +31,7 @@ class Objective:
                 self.priority = -float('inf')
             self.priority = 15 * (enemyUndocked - myUndocked)
         elif self.objtype == 'dock_owned':
-            self.priority = 20;
+            self.priority = 20 + 15*(myUndocked-enemyUndocked);
         elif self.objtype == 'dock_unowned':
             self.priority = (mySpaces - myUndocked) * 3 + 20
     
