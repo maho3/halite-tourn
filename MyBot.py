@@ -71,7 +71,7 @@ def assignObjectives(objectives, my_ships):
                 bestScore = score
                 bestObj = obj
         bestObj.addMyShip(ship)
-        logging.info('i am at ' + ship.location.x + ' ' + ship.location.y + ' my obj is to ' + bestObj.objtype + ' at ' + bestObj.entity.location.x + ' ' + bestObj.entity.location.y)
+        logging.info('i am at ' + str(ship.x) + ' ' + str(ship.y) + ' my obj is to ' + str(bestObj.objtype) + ' at ' + str(bestObj.entity.x) + ' ' + str(bestObj.entity.y))
     return objectives
 
 #flee_pos = [hlt.entity.Position(0,0), hlt.entity.Position(game_map.width-1,0),
