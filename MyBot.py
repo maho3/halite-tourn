@@ -58,6 +58,8 @@ def updateObjectives(game_map):
     return objs
 
 def assignObjectives(objectives, my_ships):
+    if len(objectives) == 0:
+        return objectives
     for ship in my_ships:
         bestObj = objectives[0]
         bestScore = -100000
