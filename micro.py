@@ -18,7 +18,7 @@ def get_nearest_enemy_ship(planet, opponent_ships):
 def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
     commands = []
     target = None
-    if objective.objtype == 'dock_unowned' or objective.objtype == 'dock_unowned':
+    if objective.objtype == 'dock_unowned' or objective.objtype == 'dock_owned':
         target = objective.entity
     elif objective.objtype == 'defend':
         # target = get_nearest_enemy_ship(objective.entity, opponent_ships)
