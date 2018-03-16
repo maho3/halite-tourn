@@ -39,7 +39,7 @@ def updateObjectives(game_map):
     for p in planets:
         en_list = sorted(opponent_ships, key=lambda x: p.calculate_distance_between(x))
         for i in range(len(en_list)):
-            if p.calculate_distance_between(en_list[i]) > 2*hlt.constants.DOCK_RADIUS:
+            if p.calculate_distance_between(en_list[i]) > 8*hlt.constants.DOCK_RADIUS:
                 break
         
         if not p.is_owned():
@@ -70,6 +70,42 @@ def assignObjectives(objectives, my_ships):
         bestObj.addMyShip(ship)
     return objectives
 
+flee_pos = [hlt.entity.Position(0,0), hlt.entity.Position(game_map.width-1,0),
+                    hlt.entity.Position(0,game_map.height-1), 
+                    hlt.entity.Position(game_map.width-1,game_map.height-1)]
+def flee():
+    for ship in my_ships:
+        navigate_command = None
+        if (ship.docking_status != ship.DockingStatus.UNDOCKED):
+            navigate_command = ship.undock()
+        else:
+            if (ship.y <= 5) and (ship.x > 5):
+                flee_pos = hlt.entity.Position(0,3)
+            elif (ship.x <= 5) and (ship.y < game_map.height - 5):
+                flee_pos = hlt.entity.Position(3,game_map.height)
+            elif (ship.y >= game_map.height - 5) and (ship.x < game_map.width - 5):
+                flee_pos = hlt.entity.Position(game_map.width, game_map.height - 3)
+            elif (ship.x >= game_map.width - 5) and (ship.y > 5):
+                flee_pos = hlt.entity.Position(game_map.width - 3, 0)
+            else:
+                flee_pos = min( hlt.entity.Position(ship.x, 0),
+                                hlt.entity.Position(0, ship.y),
+                                hlt.entity.Position(ship.x, game_map.height),
+                                hlt.entity.Position(game_map.width, ship.y),
+                                key = lambda p: ship.calculate_distance_between(p))
+            
+            navigate_command = ship.navigate(flee_pos, 
+                                            game_map,
+                                            speed=int(hlt.constants.MAX_SPEED),
+                                            entities=own_ships_nav)
+            
+        if navigate_command is not None:
+            command_queue.append(navigate_command)
+            
+    return command_queue
+
+
+
 me = None
 
 while True:
@@ -88,6 +124,12 @@ while True:
     for player in game_map.all_players():
         if player.id != game_map.get_me():
             opponent_ships += player.all_ships()
+    
+    if (0.95*len(my_ships) < 0.05*len(opponent_ships)):
+        command_queue = flee()
+        game.send_command_queue(command_queue)
+        continue
+    
     
     objectives = updateObjectives(game_map)
     
