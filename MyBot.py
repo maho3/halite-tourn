@@ -66,7 +66,7 @@ def assignObjectives(objectives, my_ships):
         bestObj = objectives[0]
         bestScore = -100000
         for obj in objectives:
-            score = obj.priority - ship.calculate_distance_between(obj.entity)
+            score = obj.priority - ship.calculate_distance_between(obj.entity) * 2
             if score > bestScore:
                 bestScore = score
                 bestObj = obj
@@ -132,7 +132,7 @@ while True:
         if player.id != game_map.get_me().id:
             opponent_ships += player.all_ships()
     
-    if (0.95*len(my_ships) < 0.05*len(opponent_ships)):
+    if (0.95*len(my_ships) < 0.1*len(opponent_ships)):
         command_queue = flee(game_map)
         game.send_command_queue(command_queue)
         continue

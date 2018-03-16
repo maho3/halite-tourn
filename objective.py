@@ -23,7 +23,7 @@ class Objective:
                 enemyUndocked -= dockedShips 
         
         if self.objtype == 'attack':
-            self.priority = 50 + myUndocked * 10 - enemyUndocked * 10             
+            self.priority = 70 + myUndocked * 10 - enemyUndocked * 10             
         elif type(self.entity) == hlt.entity.Planet and self.entity.remaining_resources == 0:
             self.priority = -float('inf')
         elif self.objtype == 'defend':
@@ -31,10 +31,10 @@ class Objective:
                 self.priority = -float('inf')
             else:
                 self.priority = 15 * (enemyUndocked - myUndocked)
-        elif self.objtype == 'dock_owned':
-            self.priority = 20 + 15*(myUndocked-enemyUndocked);
-        elif self.objtype == 'dock_unowned':
-            self.priority = (mySpaces - myUndocked) * 3 + 20
+        elif self.objtype == 'dock_owned' or self.objtype == 'dock_unowned':
+            self.priority = 30 - enemyUndocked * 30
+            if myUndocked > mySpaces:
+                self.priority = -float('inf')
     
     def addMyShip(self,ship):
         self.my_ships.append(ship)
