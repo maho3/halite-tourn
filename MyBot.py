@@ -45,11 +45,15 @@ def updateObjectives(game_map):
 
 def assignObjectives(objectives, my_ships):
     for ship in my_ships:
-        pass
+        bestObj = objectives[0]
+        bestScore = -100000
+        for obj in objectives:
+            score = obj.priroity - ship.calculate_distance_between(obj.entity)
+            if score > bestScore:
+                bestScore = score
+                bestObj = obj
+        bestObj.addMyShip(ship)
     return objectives
-
-def getMovesForObjective(objective):
-    return {}
 
 while True:
     # TURN START
@@ -64,7 +68,7 @@ while True:
     my_ships = game_map.get_me().all_ships()
     
     for player in game_map.all_players():
-        if (player.id != game_map.get_me()):
+        if player.id != game_map.get_me():
             opponent_ships += player.all_ships()
     
     objectives = updateObjectives(game_map)
@@ -72,7 +76,7 @@ while True:
     objectives = assignObjectives(objectives, my_ships)
 
     for objective in objectives:
-        command_queue += micro.getMovesForObjective(objective, game_map, own_ships_nav)
+        command_queue += getMovesForObjective(objective)
 
     
     ''' 
