@@ -9,7 +9,7 @@ import ship
 game = hlt.Game("Version2")
 # Then we print our start message to the logs
 logging.info("Starting my Version2 bot!")
-
+'''
 def attack_docked_ships(ship, planet, own_ships, game_map):
     docked_ships = planet.all_docked_ships()
     for opponent_ship in docked_ships:
@@ -31,18 +31,35 @@ def attack_ships(ship, entities_by_distance, own_ships, game_map):
         navigate_command = ship.navigate(ship.closest_point_to(nearest_ship, min_distance=0), game_map, speed=int(hlt.constants.MAX_SPEED), entities=own_ships)
         return navigate_command
     return None
+'''
 
+def updateObjectives(game_map):
+    return []
 
+def assignObjectives(objectives, shipToObjective, game_map):
+    return {}
+
+def getMovesForObjective(objective):
+    return {}
+
+objectives = []
+shipToObjective = {}
 while True:
     # TURN START
     # Update the map for the new turn and get the latest version
     game_map = game.update_map()
-
-
     # Here we define the set of commands to be sent to the Halite engine at the end of the turn
-    command_queue = []
     own_ships = []
+    command_queue = []
     
+    objectives = updateObjectives(game_map)
+    shipToObjective = assignObjectives(objectives, shipToObjective, game_map)
+
+    for objective in objectives:
+        command_queue += getMovesForObjective(objective)
+
+    
+    ''' 
     # For every ship that I control
     for ship in game_map.get_me().all_ships():
         # If the ship is docked
@@ -90,8 +107,10 @@ while True:
             if (navigate_command != None):
                 command_queue.append(navigate_command)
             break
-
+    
+    ''' 
     # Send our set of commands to the Halite engine for this turn
     game.send_command_queue(command_queue)
     # TURN END
+
 # GAME END
