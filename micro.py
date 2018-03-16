@@ -26,10 +26,9 @@ def getMovesForObjective(objective, game_map, own_ships_nav, opponent_ships):
             target=None
         else:
             nearest_ship = objective.en_ships[0]
-            if nearest_ship.calculate_distance_between(objective.entity) <= 2*objective.entity.radius:
-                target = nearest_ship.closest_point_to(objective.entity)
-            else:
-                target = hlt.entity.Position((nearest_ship.x + planet.x)/2, (nearest_ship.y + planet.y)/2)
+            nearest_to_obj = objective.entity.closest_point_to(nearest_ship)
+            target = hlt.entity.Position((nearest_ship.x + nearest_to_obj.x)/2, (nearest_ship.y + nearest_to_obj.y)/2)
+                
     elif objective.objtype == 'attack':
         target = weak_ship(objective.entity)
     
